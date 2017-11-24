@@ -43,17 +43,17 @@ Potatso.xcworkspace/xcshareddata/
 # you should judge for yourself, the pros and cons are mentioned at:
 # http://guides.cocoapods.org/using/using-cocoapods.html#should-i-ignore-the-pods-directory-in-source-control
 #
-Pods/
+#Pods/
 # Add Podfile.lock for future maintenance reason
 #Podfile.lock
 
 # Carthage
-Carthage/Build
+#Carthage/Build
 
 # fastlane
-fastlane
+#fastlane
 
 Gemfile.lock
 
-Confidential/
-Confidential.h
+#Confidential/
+#Confidential.h
