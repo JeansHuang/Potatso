@@ -1,3 +1,12 @@
+# How to Build Project
+#  怎么编译
+1. `git clone --recursive https://github.com/JeansHuang/Potatso.git
+` 
+2. `carthage update` 
+3. build support Xcode9.1 iOS11.1 Swift3.2
+
+---
+
 <a href="https://github.com/haxpor/donate"><img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat" alt="donate"></a>
 
 # Potatso ![GPLv3 License](https://img.shields.io/badge/License-GPLv3-blue.svg)
