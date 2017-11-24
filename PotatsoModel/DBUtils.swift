@@ -121,7 +121,7 @@ extension DBUtils {
             res = res.filter(filter)
         }
         if let sorted = sorted {
-            res = res.sorted(byProperty: sorted)
+            res = res.sorted(byKeyPath: sorted)
         }
         return res
     }
@@ -134,7 +134,7 @@ extension DBUtils {
         }
         var res = mRealm.objects(type).filter(mFilter)
         if let sorted = sorted {
-            res = res.sorted(byProperty: sorted)
+            res = res.sorted(byKeyPath: sorted)
         }
         return res.first
     }

@@ -30,7 +30,7 @@ end
 
 target "Potatso" do
     pod 'Aspects', :path => "./Library/Aspects/"
-    pod 'Cartography'
+    pod 'Cartography', :git => 'https://github.com/corujautx/Cartography.git'
     pod 'AsyncSwift'
     pod 'SwiftColor'
     pod 'Appirater'
@@ -64,7 +64,7 @@ target "PacketProcessor" do
 end
 
 target "TodayWidget" do
-    pod 'Cartography'
+    pod 'Cartography', :git => 'https://github.com/corujautx/Cartography.git'
     pod 'SwiftColor'
     library
     socket
@@ -94,4 +94,3 @@ post_install do |installer|
         end
     end
 end
-
