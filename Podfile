@@ -9,8 +9,8 @@ def fabric
 end
 
 def library
-    pod 'KissXML'
-    pod 'KissXML/libxml_module'
+    pod 'KissXML', '~> 5.2.2'
+    # pod 'KissXML/libxml_module'
     pod 'ICSMainFramework', :path => "./Library/ICSMainFramework/"
     pod 'MMWormhole', '~> 2.0.0'
     pod 'KeychainAccess'
@@ -34,7 +34,7 @@ target "Potatso" do
     pod 'AsyncSwift'
     pod 'SwiftColor'
     pod 'Appirater'
-    pod 'Eureka', :path => "./Library/Eureka/"
+    pod 'Eureka', '~> 4.1.1'
     pod 'MBProgressHUD'
     pod 'CallbackURLKit', :path => "./Library/CallbackURLKit"
     pod 'ICDMaterialActivityIndicatorView', '~> 0.1.0'
@@ -90,6 +90,11 @@ post_install do |installer|
             config.build_settings['ENABLE_BITCODE'] = 'NO'
             if target.name == "HelpShift"
                 config.build_settings["OTHER_LDFLAGS"] = '$(inherited) "-ObjC"'
+            end
+            if  target.name == 'Eureka'
+                target.build_configurations.each do |config|
+                    config.build_settings['SWIFT_VERSION'] = '4.1'
+                end
             end
         end
     end

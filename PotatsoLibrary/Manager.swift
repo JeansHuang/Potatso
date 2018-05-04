@@ -44,13 +44,13 @@ open class Manager {
     }
     
     open let wormhole = MMWormhole(applicationGroupIdentifier: Potatso.sharedGroupIdentifier(), optionalDirectory: "wormhole")
-
+    
     var observerAdded: Bool = false
     
     open var defaultConfigGroup: ConfigurationGroup {
         return getDefaultConfigGroup()
     }
-
+    
     fileprivate init() {
         loadProviderManager { (manager) -> Void in
             if let manager = manager {
@@ -90,7 +90,7 @@ open class Manager {
             self.vpnStatus = .off
         }
     }
-
+    
     open func switchVPN(_ completion: ((NETunnelProviderManager?, Error?) -> Void)? = nil) {
         loadProviderManager { [unowned self] (manager) in
             if let manager = manager {
@@ -108,7 +108,7 @@ open class Manager {
                 self.stopVPN()
                 completion?(nil, nil)
             }
-
+            
         }
     }
     
@@ -131,7 +131,7 @@ open class Manager {
             print("copyTemplateData fail")
         }
     }
-
+    
     func copyGEOIPData() throws {
         guard let fromURL = Bundle.main.url(forResource: "GeoLite2-Country", withExtension: "mmdb") else {
             return
@@ -144,7 +144,7 @@ open class Manager {
             try FileManager.default.copyItem(at: fromURL, to: toURL)
         }
     }
-
+    
     func copyTemplateData() throws {
         guard let bundleURL = Bundle.main.url(forResource: "template", withExtension: "bundle") else {
             return
@@ -165,7 +165,7 @@ open class Manager {
             }
         }
     }
-
+    
     fileprivate func getDefaultConfigGroup() -> ConfigurationGroup {
         if let groupUUID = Potatso.sharedUserDefaults().string(forKey: kDefaultGroupIdentifier), let group = DBUtils.get(groupUUID, type: ConfigurationGroup.self), !group.deleted {
             return group
@@ -184,7 +184,7 @@ open class Manager {
             }
             let uuid = group.uuid
             let name = group.name
-            DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: { 
+            DispatchQueue.global(priority: DispatchQueue.GlobalQueuePriority.default).async(execute: {
                 self.setDefaultConfigGroup(uuid, name: name)
             })
             return group
@@ -195,7 +195,7 @@ open class Manager {
         do {
             try regenerateConfigFiles()
         } catch {
-
+            
         }
         Potatso.sharedUserDefaults().set(id, forKey: kDefaultGroupIdentifier)
         Potatso.sharedUserDefaults().set(name, forKey: kDefaultGroupName)
@@ -208,11 +208,11 @@ open class Manager {
         try generateShadowsocksConfig()
         try generateHttpProxyConfig()
     }
-
+    
 }
 
 extension ConfigurationGroup {
-
+    
     public var isDefault: Bool {
         let defaultUUID = Manager.sharedManager.defaultConfigGroup.uuid
         let isDefault = defaultUUID == uuid
@@ -238,32 +238,32 @@ extension Manager {
     }
     
     func generateSocksConfig() throws {
-        let root = NSXMLElement.element(withName: "antinatconfig") as! NSXMLElement
-        let interface = NSXMLElement.element(withName: "interface", children: nil, attributes: [NSXMLNode.attribute(withName: "value", stringValue: "127.0.0.1") as! DDXMLNode]) as! NSXMLElement
+        let root = XMLElement.element(withName: "antinatconfig") as! DDXMLElement
+        let interface = XMLElement.element(withName: "interface", children: nil, attributes: [XMLNode.attribute(withName: "value", stringValue: "127.0.0.1") as! DDXMLNode]) as! DDXMLElement
         root.addChild(interface)
         
-        let port = NSXMLElement.element(withName: "port", children: nil, attributes: [NSXMLNode.attribute(withName: "value", stringValue: "0") as! DDXMLNode])  as! NSXMLElement
+        let port = XMLElement.element(withName: "port", children: nil, attributes: [XMLNode.attribute(withName: "value", stringValue: "0") as! DDXMLNode]) as! DDXMLElement
         root.addChild(port)
         
-        let maxbindwait = NSXMLElement.element(withName: "maxbindwait", children: nil, attributes: [NSXMLNode.attribute(withName: "value", stringValue: "10") as! DDXMLNode]) as! NSXMLElement
+        let maxbindwait = XMLElement.element(withName: "maxbindwait", children: nil, attributes: [XMLNode.attribute(withName: "value", stringValue: "10") as! DDXMLNode]) as! DDXMLElement
         root.addChild(maxbindwait)
         
         
-        let authchoice = NSXMLElement.element(withName: "authchoice") as! NSXMLElement
-        let select = NSXMLElement.element(withName: "select", children: nil, attributes: [NSXMLNode.attribute(withName: "mechanism", stringValue: "anonymous") as! DDXMLNode])  as! NSXMLElement
+        let authchoice = XMLElement.element(withName: "authchoice") as! DDXMLElement
+        let select = XMLElement.element(withName: "select", children: nil, attributes: [XMLNode.attribute(withName: "mechanism", stringValue: "anonymous") as! DDXMLNode]) as! DDXMLElement
         
         authchoice.addChild(select)
         root.addChild(authchoice)
         
-        let filter = NSXMLElement.element(withName: "filter") as! NSXMLElement
+        let filter = XMLElement.element(withName: "filter") as! DDXMLElement
         if let upstreamProxy = upstreamProxy {
-            let chain = NSXMLElement.element(withName: "chain", children: nil, attributes: [NSXMLNode.attribute(withName: "name", stringValue: upstreamProxy.name) as! DDXMLNode]) as! NSXMLElement
+            let chain = XMLElement.element(withName: "chain", children: nil, attributes: [XMLNode.attribute(withName: "name", stringValue: upstreamProxy.name) as! DDXMLNode]) as! DDXMLElement
             switch upstreamProxy.type {
             case .Shadowsocks:
                 let uriString = "socks5://127.0.0.1:${ssport}"
-                let uri = NSXMLElement.element(withName: "uri", children: nil, attributes: [NSXMLNode.attribute(withName: "value", stringValue: uriString) as! DDXMLNode]) as! NSXMLElement
+                let uri = XMLElement.element(withName: "uri", children: nil, attributes: [XMLNode.attribute(withName: "value", stringValue: uriString) as! DDXMLNode]) as! DDXMLElement
                 chain.addChild(uri)
-                let authscheme = NSXMLElement.element(withName: "authscheme", children: nil, attributes: [NSXMLNode.attribute(withName: "value", stringValue: "anonymous") as! DDXMLNode]) as! NSXMLElement
+                let authscheme = XMLElement.element(withName: "authscheme", children: nil, attributes: [XMLNode.attribute(withName: "value", stringValue: "anonymous") as! DDXMLNode]) as! DDXMLElement
                 chain.addChild(authscheme)
             default:
                 break
@@ -271,7 +271,7 @@ extension Manager {
             root.addChild(chain)
         }
         
-        let accept = NSXMLElement.element(withName: "accept") as! NSXMLElement
+        let accept = XMLElement.element(withName: "accept") as! DDXMLElement
         filter.addChild(accept)
         root.addChild(filter)
         
@@ -319,13 +319,13 @@ extension Manager {
         mainConf["mmdbpath"] = maxminddbPath as AnyObject?
         mainConf["global-mode"] = defaultToProxy as AnyObject?
         mainConf["debug"] = 1024+65536+1 as AnyObject?
-//        mainConf["debug"] = 131071
-//        mainConf["debug"] = mainConf["debug"] as! Int + 4096
+        //        mainConf["debug"] = 131071
+        //        mainConf["debug"] = mainConf["debug"] as! Int + 4096
         mainConf["actionsfile"] = userActionUrl.path as AnyObject?
-
+        
         let mainContent = mainConf.map { "\($0) \($1)"}.joined(separator: "\n")
         try mainContent.write(to: Potatso.sharedHttpProxyConfUrl(), atomically: true, encoding: String.Encoding.utf8)
-
+        
         var actionContent: [String] = []
         var forwardURLRules: [String] = []
         var forwardIPRules: [String] = []
@@ -342,30 +342,30 @@ extension Manager {
                 forwardURLRules.append(rule.description)
             }
         }
-
+        
         if forwardURLRules.count > 0 {
             actionContent.append("{+forward-rule}")
             actionContent.append(contentsOf: forwardURLRules)
         }
-
+        
         if forwardIPRules.count > 0 {
             actionContent.append("{+forward-rule}")
             actionContent.append(contentsOf: forwardIPRules)
         }
-
+        
         if forwardGEOIPRules.count > 0 {
             actionContent.append("{+forward-rule}")
             actionContent.append(contentsOf: forwardGEOIPRules)
         }
-
+        
         // DNS pollution
         actionContent.append("{+forward-rule}")
         actionContent.append(contentsOf: Pollution.dnsList.map({ "DNS-IP-CIDR, \($0)/32, PROXY" }))
-
+        
         let userActionString = actionContent.joined(separator: "\n")
         try userActionString.write(toFile: userActionUrl.path, atomically: true, encoding: String.Encoding.utf8)
     }
-
+    
 }
 
 extension Manager {

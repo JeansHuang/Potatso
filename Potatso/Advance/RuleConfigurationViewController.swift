@@ -64,7 +64,7 @@ class RuleConfigurationViewController: FormViewController {
     
     func generateForm() {
         form +++ Section()
-            <<< PushRow<RuleType>(kRuleFormType) {
+            <<< PushRow<PotatsoModel.RuleType>(kRuleFormType) {
                 $0.title = "Type".localized()
                 $0.selectorTitle = "Choose type of rule".localized()
                 $0.options = [RuleType.DomainSuffix, RuleType.DomainMatch, RuleType.Domain, RuleType.IPCIDR, RuleType.GeoIP]
@@ -96,7 +96,7 @@ class RuleConfigurationViewController: FormViewController {
     func save() {
         do {
             let values = form.values()
-            guard let type = values[kRuleFormType] as? RuleType else {
+            guard let type = values[kRuleFormType] as? PotatsoModel.RuleType else {
                 throw "You must choose a type".localized()
             }
             guard let value = (values[kRuleFormValue] as? String)?.trimmingCharacters(in: CharacterSet.whitespaces), value.characters.count > 0 else {
