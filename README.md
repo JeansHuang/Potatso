@@ -2,7 +2,7 @@
 #  怎么编译
 1. `git clone --recursive https://github.com/JeansHuang/Potatso.git
 ` 
-2. `carthage update` 
+2. `carthage update --platform ios` 
 3. build support Xcode9.1 iOS11.1 Swift3.2
 
 ---
