@@ -3,7 +3,7 @@
 1. `git clone --recursive https://github.com/JeansHuang/Potatso.git
 ` 
 2. `carthage update --platform ios` 
-3. build support Xcode9.1 iOS11.1 Swift3.2
+3. build support Xcode9.3 iOS11.3 Swift3.3
 
 ---
 
